@@ -1,38 +1,53 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
-import Card from './components/Card'
+import Card from './components/card'
+
 function App() {
- const [attori,setAttori] = useState([]);
- const [totale, setTotale] = useState(null);
-const [totalePagine, setTotalePagine] =useState(null); 
+  const [attori, setAttori] = useState([]);  
   const [caricamento, setCaricamento] = useState(false);
   const [pagina, setPagina] = useState(1);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchAttori();
-  },[pagina])
+  }, [pagina]);
 
-  function fetchAttori(){
+  function fetchAttori() {
     setCaricamento(true);
-    axios
-    .get('https://lanciweb.github.io/demo/api/actors/','https://lanciweb.github.io/demo/api/actresses/')
-    .then((resp)=>{
-      setAttori(resp.data.results)
-      setTotale(resp.data.info.count)
-      setTotalePagine(resp.data.info.pages)
-      setCaricamento(false);
-    }) 
+    axios.get('https://lanciweb.github.io/demo/api/actors/')
+      .then((resp) => {
+        console.log(resp.data); 
+        setAttori(resp.data.results || resp.data || []);
+        setCaricamento(false);
+      })
   }
 
-return (
+  return (
     <>
-      <div className="container">
+      <header>
         <h1>Actors</h1>
-        <p>list of actors fetched from an api</p>
-      </div>
+        <p>actors fetched from an api</p>
+      </header>
+
+      {caricamento ? (
+        <p>Caricamento...</p>
+      ) : (
+        <div>
+          {attori.length > 0 ? ( 
+            attori.map((attore) => (
+              <div className="col" key={attore.id}>  
+                <Card attore={attore} /> 
+              </div>
+            ))
+          ) : (
+            <p>Nessun attore trovato</p>
+          )}
+        </div>
+      )}
+
+      <span>Pagina {pagina}</span>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

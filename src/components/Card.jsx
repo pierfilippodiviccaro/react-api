@@ -8,7 +8,7 @@ export default function Card({attore}){
         </div>
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">{name}</h5>
+            <h3 className="card-title">{name}</h3>
             <p>{birth_year}</p>
             <p>{nationality}</p>
             <p>{biography}</p>
